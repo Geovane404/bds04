@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,14 +27,14 @@ public class EventController {
 	private EventService service;
 
 	@GetMapping
-	public ResponseEntity<List<EventDTO>> findAll() {
+	public ResponseEntity<Page<EventDTO>> findAll(Pageable pageable) {
 		
-		List<EventDTO> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		Page<EventDTO> page = service.findAll(pageable);
+		return ResponseEntity.ok().body(page);
 	}
 
 	@PostMapping
-	public ResponseEntity<EventDTO> insert(@RequestBody EventDTO dto) {
+	public ResponseEntity<EventDTO> insert(@Valid @RequestBody EventDTO dto) {
 		
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
